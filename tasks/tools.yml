@@ -1,0 +1,9 @@
+- name: Install updates
+  apt: update_cache=yes cache_valid_time={{ cache_valid_time }}
+
+- name: Install essential packages
+  apt: pkg="{{ item }}" state=latest
+  with_items:
+    - ntp
+    - fail2ban
+    - htop

@@ -1,0 +1,35 @@
+# DO API v2 settings
+do_api_token: ~
+
+# DO SSH key settings
+do_ssh_name: ~
+do_ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+do_ssh_private_key: "~/.ssh/id_rsa"
+
+# DO droplet settings
+do_region: ams2
+do_size: 512mb
+do_image: "ubuntu-16-04-x64"
+
+# SSH
+ssh_port: 22
+
+# UFW - Firewall settings
+ufw_allow_ports:
+  - 22
+  - 80
+  - 443
+
+# Swap settings
+swapfile_location: /swapfile
+swapfile_size: 4G
+swapfile_swappiness: 10
+swapfile_vfs_cache_pressure: 50
+
+# System user to create
+ssh_user: ~
+ssh_groups: "sudo"
+ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+# Run apt-get update only if the last one is more than 3600 seconds ago http://docs.ansible.com/ansible/apt_module.html
+cache_valid_time: 3600

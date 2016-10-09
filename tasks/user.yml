@@ -1,0 +1,24 @@
+- name: Create sudo user
+  user: >
+    name="{{ ssh_user }}"
+    state=present
+    groups="{{ ssh_groups }}"
+    shell=/bin/bash
+    append=yes
+    createhome=yes
+    
+- name: Ensure sudoers.d is enabled
+  lineinfile: >
+    dest=/etc/sudoers
+    regexp='^#includedir /etc/sudoers.d'
+    line='#includedir /etc/sudoers.d'
+    state=present backup=yes
+
+- name: Set up password-less sudo for admin users
+  copy: >
+    content="%{{ ssh_groups }} ALL=(ALL) NOPASSWD:ALL\nDefaults    env_keep+=SSH_AUTH_SOCK\n"
+    dest=/etc/sudoers.d/admin
+    owner=root group=root mode=0440
+
+- name: Deploy ssh public key
+  authorized_key: user="{{ ssh_user }}" key="{{ ssh_pub_key }}"

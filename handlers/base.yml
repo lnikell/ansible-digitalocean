@@ -1,0 +1,8 @@
+- name: reload sysctl
+  command: sysctl -p
+
+- name: restart ufw
+  service: name=ufw state=restarted
+
+- name: restart sshd
+  service: name=ssh state=restarted
