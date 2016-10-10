@@ -58,4 +58,25 @@ ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 # Run apt-get update only if the last one is more than 3600 seconds ago http://docs.ansible.com/ansible/apt_module.html
 cache_valid_time: 3600
 ```
+## Playbooks
+
+#### launch.yml
+
+Launch and configure a new server on DigitalOcean.
+
+Run: ``ansible-playbook -i hosts launch.yml``
+
+- Register Droplet
+- Register DNS(attach droplet to domain)
+- Add Swap
+- Create new sudo password-less user 
+- Update packages(sudo apt-get update)
+- Install packages - ntp, fail2ban, htop
+- Security tweaks - strict ssh access, configure firewall
+
+#### destroy.yml
+
+Destroy a server on DigitalOcean
+
+
 
