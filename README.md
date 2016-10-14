@@ -6,16 +6,77 @@
 - Install packages
 - Security tweaks
 
-## Installation
+## Quick Start
 
 
 * Install [Ansible 2.0](http://docs.ansible.com/ansible/intro_installation.html)
 
 * Copy vars.yml.example to vars.yml and change the variables to your need.
 
-## Digital Ocean configuration
+* Create a new API key on the [API access page](https://cloud.digitalocean.com/api_access). Add the api_token to `vars.yml`.
 
-Create a new API key on the [API access page](https://cloud.digitalocean.com/api_access). 
-Add the api_token to `vars.yml`.
+* Run ``ansible-playbook -i hosts launch.yml``
 
-![image](https://cloud.githubusercontent.com/assets/2697570/19223963/74bd206e-8e73-11e6-83cb-b0f2192c6d5e.png)
+## Variables
+
+```yml
+# DO API v2 settings
+do_api_token: ~
+
+# DO SSH key settings
+do_ssh_name: ~
+do_ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+do_ssh_private_key: "~/.ssh/id_rsa"
+
+# DO droplet settings
+do_region: ams2
+do_size: 512mb
+do_image: "ubuntu-16-04-x64"
+
+# SSH
+ssh_port: 22
+
+# UFW - Firewall settings
+ufw_allow_ports:
+  - 22
+  - 80
+  - 443
+
+# Swap settings - https://goo.gl/vrqDqI
+swapfile_location: /swapfile
+swapfile_size: 4G
+swapfile_swappiness: 10
+swapfile_vfs_cache_pressure: 50
+
+# System user to create
+# your future ssh user for access to a new droplet
+ssh_user: ~ 
+ssh_groups: "sudo"
+#path on host machine to public key for adding it to authorized keys
+ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}" 
+
+# Run apt-get update only if the last one is more than 3600 seconds ago http://docs.ansible.com/ansible/apt_module.html
+cache_valid_time: 3600
+```
+## Playbooks
+
+#### launch.yml
+
+Launch and configure a new server on DigitalOcean.
+
+Run: ``ansible-playbook -i hosts launch.yml``
+
+- Register Droplet
+- Register DNS(attach droplet to domain)
+- Add Swap
+- Create new sudo password-less user 
+- Update packages(sudo apt-get update)
+- Install packages - ntp, fail2ban, htop
+- Security tweaks - strict ssh access, configure firewall
+
+#### destroy.yml
+
+Destroy a server on DigitalOcean
+
+
+
